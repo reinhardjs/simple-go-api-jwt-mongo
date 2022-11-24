@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"simple-api/configs"
 	"simple-api/routes"
 
 	"github.com/gorilla/mux"
@@ -12,9 +11,6 @@ import (
 
 func main() {
 	router := mux.NewRouter()
-
-	// connect database
-	configs.ConnectDB()
 
 	// add routes
 	routes.UserRoute(router)
