@@ -2,16 +2,23 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"simple-api/configs"
+	"simple-api/routes"
+
+	"github.com/gorilla/mux"
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello, World")
-}
-
 func main() {
-	http.HandleFunc("/", home)
+	router := mux.NewRouter()
 
-	fmt.Println("starting web server at http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	// connect database
+	configs.ConnectDB()
+
+	// add routes
+	routes.UserRoute(router)
+
+	fmt.Println("starting at http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
