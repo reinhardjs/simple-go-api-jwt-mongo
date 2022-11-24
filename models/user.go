@@ -4,8 +4,8 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type User struct {
 	Id       primitive.ObjectID `json:"id,omitempty"`
-	email    string             `json:"email,omitempty"`
-	password string             `json:"password,omitempty"`
-	token    string             `json:"token,omitempty"`
-	role     string             `json:"role,omitempty"`
+	Email    string             `json:"email,omitempty"`
+	Password string             `json:"password,omitempty"`
+	Token    string             `json:"token,omitempty"`
+	Role     string             `json:"role,omitempty"`
 }
