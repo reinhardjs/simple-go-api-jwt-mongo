@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
+	"simple-api/configs"
 	"simple-api/models"
 	"simple-api/responses"
 	"time"
@@ -63,7 +64,8 @@ func CreateUser() http.HandlerFunc {
 		}
 
 		//all validation passed, then insert new data to users collection
-		result, err := models.UsersCollection.InsertOne(ctx, newUser)
+		var usersCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
+		result, err := usersCollection.InsertOne(ctx, newUser)
 
 		if err != nil {
 			response := responses.BaseResponse{Status: http.StatusInternalServerError, Message: err.Error(), Data: map[string]interface{}{}}
@@ -98,7 +100,8 @@ func GetToken() http.HandlerFunc {
 		filter := bson.M{"email": user.Email}
 
 		var result models.User
-		err = models.UsersCollection.FindOne(ctx, filter).Decode(&result)
+		var usersCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
+		err = usersCollection.FindOne(ctx, filter).Decode(&result)
 
 		if err != nil && err == mongo.ErrNoDocuments {
 			response := responses.BaseResponse{Status: http.StatusNotFound, Message: "User not found", Data: map[string]interface{}{}}

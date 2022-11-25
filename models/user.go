@@ -12,8 +12,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var UsersCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
-
 type User struct {
 	Id       primitive.ObjectID `json:"id,omitempty"`
 	Email    string             `json:"email,omitempty"`
@@ -36,7 +34,8 @@ func (account *User) Validate(context context.Context) (responses.BaseResponse, 
 
 	//Email must be unique
 	var result User
-	err := UsersCollection.FindOne(context, filter).Decode(&result)
+	var usersCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
+	err := usersCollection.FindOne(context, filter).Decode(&result)
 
 	if err != nil && err != mongo.ErrNoDocuments {
 		return responses.BaseResponse{Status: http.StatusBadRequest, Message: "Connection error. Please retry", Data: map[string]interface{}{}}, false
