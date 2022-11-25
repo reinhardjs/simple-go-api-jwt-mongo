@@ -110,7 +110,7 @@ func GetToken() http.HandlerFunc {
 		token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 		tokenString, _ := token.SignedString([]byte(os.Getenv("token_secret_key")))
 
-		response := responses.BaseResponse{Status: http.StatusNotFound, Message: "User not found", Data: map[string]interface{}{"email": user.Email, "token": tokenString}}
+		response := responses.BaseResponse{Status: http.StatusNotFound, Message: "token", Data: map[string]interface{}{"email": user.Email, "token": tokenString}}
 		rw.WriteHeader(response.Status)
 		json.NewEncoder(rw).Encode(response)
 		return
