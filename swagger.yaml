@@ -1,0 +1,188 @@
+openapi: 3.0.3
+info:
+  title: Simple Go API (JWT + MongoDB)
+  version: 1.0.0
+servers:
+  - url: http://103.134.154.18:32012
+paths:
+  /users:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - user
+      summary: Create user
+      description: This can only be done by account with admin role.
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /token:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - user
+      summary: Create user
+      description: This can only be done by account with admin role.
+      operationId: getToken
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /posts:
+    get:
+      tags:
+        - post
+      security:
+        - bearerAuth: []
+      summary: Get list of post
+      description: This can be done by account with admin role and also user role.
+      operationId: getlistofpost
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    post:
+      tags:
+        - post
+      security:
+        - bearerAuth: []
+      summary: Create post
+      description: This can only be done by account with admin role.
+      operationId: createpost
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /posts/{postId}:
+    get:
+      tags:
+        - post
+      security:
+        - bearerAuth: []
+      summary: Get post
+      description: This can be done by account with admin role and also user role.
+      operationId: getpost
+      parameters:
+        - name: postId
+          in: path
+          description: id of post
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    put:
+      tags:
+        - post
+      summary: Update post
+      description: This can only be done by the account with role admin.
+      operationId: updatepost
+      parameters:
+        - name: postId
+          in: path
+          description: id of post
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    delete:
+      tags:
+        - post
+      summary: Update post
+      description: This can only be done by the account with role admin.
+      operationId: deletepost
+      parameters:
+        - name: postId
+          in: path
+          description: id of post
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  schemas:
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@email.com
+        password:
+          type: string
+          example: password123
+    Post:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "This is title"
+        description:
+          type: string
+          example: "this is description"
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 200
+        message:
+          type: string
+          example: "success"
+        data:
+          type: object
