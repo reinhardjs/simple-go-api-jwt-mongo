@@ -51,3 +51,12 @@ func (account *User) Validate(context context.Context) (responses.BaseResponse, 
 func (account *User) Create(context context.Context, user User) (interface{}, error) {
 	return userCollection.InsertOne(context, user)
 }
+
+func (account *User) Find(context context.Context) (User, error) {
+	filter := bson.M{"email": account.Email}
+
+	var result User
+	err := userCollection.FindOne(context, filter).Decode(&result)
+
+	return result, err
+}
