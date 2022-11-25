@@ -12,6 +12,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+var UsersCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
+
 type User struct {
 	Id       primitive.ObjectID `json:"id,omitempty"`
 	Email    string             `json:"email,omitempty"`
@@ -19,8 +21,6 @@ type User struct {
 	Token    string             `json:"token,omitempty"`
 	Role     string             `json:"role,omitempty"`
 }
-
-var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
 
 func (account *User) Validate(context context.Context) (responses.BaseResponse, bool) {
 
@@ -36,7 +36,7 @@ func (account *User) Validate(context context.Context) (responses.BaseResponse, 
 
 	//Email must be unique
 	var result User
-	err := userCollection.FindOne(context, filter).Decode(&result)
+	err := UsersCollection.FindOne(context, filter).Decode(&result)
 
 	if err != nil && err != mongo.ErrNoDocuments {
 		return responses.BaseResponse{Status: http.StatusBadRequest, Message: "Connection error. Please retry", Data: map[string]interface{}{}}, false
@@ -46,17 +46,4 @@ func (account *User) Validate(context context.Context) (responses.BaseResponse, 
 	}
 
 	return responses.BaseResponse{Status: http.StatusOK, Message: "Requirement passed", Data: map[string]interface{}{}}, true
-}
-
-func (account *User) Create(context context.Context, user User) (interface{}, error) {
-	return userCollection.InsertOne(context, user)
-}
-
-func (account *User) Find(context context.Context) (User, error) {
-	filter := bson.M{"email": account.Email}
-
-	var result User
-	err := userCollection.FindOne(context, filter).Decode(&result)
-
-	return result, err
 }

@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v4"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
@@ -62,7 +63,7 @@ func CreateUser() http.HandlerFunc {
 		}
 
 		//all validation passed, then insert new data to users collection
-		result, err := newUser.Create(ctx, newUser)
+		result, err := models.UsersCollection.InsertOne(ctx, newUser)
 
 		if err != nil {
 			response := responses.BaseResponse{Status: http.StatusInternalServerError, Message: err.Error(), Data: map[string]interface{}{}}
@@ -86,7 +87,7 @@ func GetToken() http.HandlerFunc {
 
 		rw.Header().Add("Content-Type", "application/json")
 
-		err := json.NewDecoder(r.Body).Decode(user) //decode the request body into struct and failed if any error occur
+		var err = json.NewDecoder(r.Body).Decode(user) //decode the request body into struct and failed if any error occur
 		if err != nil {
 			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: map[string]interface{}{}}
 			rw.WriteHeader(response.Status)
@@ -94,7 +95,11 @@ func GetToken() http.HandlerFunc {
 			return
 		}
 
-		result, err := user.Find(ctx)
+		filter := bson.M{"email": user.Email}
+
+		var result models.User
+		err = models.UsersCollection.FindOne(ctx, filter).Decode(&result)
+
 		if err != nil && err == mongo.ErrNoDocuments {
 			response := responses.BaseResponse{Status: http.StatusNotFound, Message: "User not found", Data: map[string]interface{}{}}
 			rw.WriteHeader(response.Status)
