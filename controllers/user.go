@@ -26,7 +26,8 @@ func CreateUser() http.HandlerFunc {
 		//validate the request body
 		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 			rw.WriteHeader(http.StatusBadRequest)
-			response := responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}}
+			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"error": err.Error()}}
+			rw.Header().Add("Content-Type", "application/json")
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
@@ -34,7 +35,8 @@ func CreateUser() http.HandlerFunc {
 		//use the validator library to validate required fields
 		if validationErr := validate.Struct(&user); validationErr != nil {
 			rw.WriteHeader(http.StatusBadRequest)
-			response := responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": validationErr.Error()}}
+			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: validationErr.Error(), Data: map[string]interface{}{}}
+			rw.Header().Add("Content-Type", "application/json")
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
@@ -50,13 +52,15 @@ func CreateUser() http.HandlerFunc {
 		result, err := userCollection.InsertOne(ctx, newUser)
 		if err != nil {
 			rw.WriteHeader(http.StatusInternalServerError)
-			response := responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}}
+			response := responses.BaseResponse{Status: http.StatusInternalServerError, Message: err.Error(), Data: map[string]interface{}{}}
+			rw.Header().Add("Content-Type", "application/json")
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
 
 		rw.WriteHeader(http.StatusCreated)
-		response := responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"data": result}}
+		response := responses.BaseResponse{Status: http.StatusCreated, Message: "success", Data: result}
+		rw.Header().Add("Content-Type", "application/json")
 		json.NewEncoder(rw).Encode(response)
 	}
 }
