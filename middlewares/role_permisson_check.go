@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"simple-api/responses"
+	"strings"
 )
 
 func contains(array []string, find string) bool {
@@ -25,11 +26,11 @@ var RolePermissionCheck = func(next http.Handler) http.Handler {
 				"method": "GET",
 			},
 		} //List of endpoints that doesn't require role permission checker
-		requestPath := r.URL.Path //current request path
+		firstRequestPath := "/" + strings.Split(r.URL.Path, "/")[1] //current request path
 
 		//check if request does not need authentication, serve the request if it doesn't need it
 		for _, mapItem := range notCheck {
-			if mapItem["path"] == requestPath && mapItem["method"] == r.Method {
+			if mapItem["path"] == firstRequestPath && mapItem["method"] == r.Method {
 				next.ServeHTTP(rw, r)
 				return
 			}
@@ -51,7 +52,7 @@ var RolePermissionCheck = func(next http.Handler) http.Handler {
 
 		userRole := r.Context().Value("user-role")
 
-		if contains(permittedEndpoints[userRole.(string)][r.Method], requestPath) {
+		if contains(permittedEndpoints[userRole.(string)][r.Method], firstRequestPath) {
 			isPermitted = true
 		}
 
