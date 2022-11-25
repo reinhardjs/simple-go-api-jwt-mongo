@@ -23,11 +23,13 @@ var RolePermissionCheck = func(next http.Handler) http.Handler {
 
 		permittedEndpoints := map[string]map[string][]string{
 			"user": {
-				"GET": []string{"/token"},
+				"GET": []string{"/token", "/posts"},
 			},
 			"admin": {
-				"GET":  []string{"/token"},
-				"POST": []string{"/users"},
+				"GET":    []string{"/token", "/posts"},
+				"POST":   []string{"/users", "/posts"},
+				"PUT":    []string{"/posts"},
+				"DELETE": []string{"/posts"},
 			},
 		} //List of endpoints permitted to each role
 
