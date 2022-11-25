@@ -8,11 +8,12 @@ I've deployed this project to my personal VPS, and deployed to `single-node kube
 
 You can access via http://103.134.154.18:32012
 
-For non expiring token you can use the following jwt token
-`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2MzgwYzIxNmE2NjBhOWQ3ZjRmMDZmZDIiLCJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiJ9.kkcnAqajjcx0YmtRnWk-P594v_2wIEObwUzTtuMq_JY`
 
 Credentials:
 ```
+# For non expiring token you can use the following jwt token
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2MzgwYzIxNmE2NjBhOWQ3ZjRmMDZmZDIiLCJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiJ9.kkcnAqajjcx0YmtRnWk-P594v_2wIEObwUzTtuMq_JY
+
 # Here is the example body request of user credentials to access `GET /token` endpoint to get the jwt-token
 1.
 {
