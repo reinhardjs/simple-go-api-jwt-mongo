@@ -18,13 +18,17 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 
-		notAuth := []string{"/api/user/new", "/api/user/login"} //List of endpoints that doesn't require auth
-		requestPath := r.URL.Path                               //current request path
+		notAuth := []map[string]string{
+			{
+				"path":   "/token",
+				"method": "GET",
+			},
+		} //List of endpoints that doesn't require auth
+		requestPath := r.URL.Path //current request path
 
 		//check if request does not need authentication, serve the request if it doesn't need it
-		for _, value := range notAuth {
-
-			if value == requestPath {
+		for _, mapItem := range notAuth {
+			if mapItem["path"] == requestPath && mapItem["method"] == r.Method {
 				next.ServeHTTP(rw, r)
 				return
 			}
@@ -44,7 +48,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		if len(splitted) != 2 {
 			rw.Header().Add("Content-Type", "application/json")
 			rw.WriteHeader(http.StatusForbidden)
-			response := responses.BaseResponse{Status: http.StatusForbidden, Message: "Invalid/Malformed auth token", Data: map[string]interface{}{}}
+			response := responses.BaseResponse{Status: http.StatusForbidden, Message: "Invalid token format", Data: map[string]interface{}{}}
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
@@ -61,7 +65,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		if err != nil { //Malformed token, returns with http code 403 as usual
 			rw.Header().Add("Content-Type", "application/json")
 			rw.WriteHeader(http.StatusForbidden)
-			response := responses.BaseResponse{Status: http.StatusForbidden, Message: "Malformed authentication token", Data: map[string]interface{}{}}
+			response := responses.BaseResponse{Status: http.StatusForbidden, Message: err.Error(), Data: map[string]interface{}{}}
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
@@ -75,7 +79,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		}
 
 		//Everything went well, proceed with the request and set the caller to the user retrieved from the parsed token
-		ctx := context.WithValue(r.Context(), "user", tk.Id)
+		ctx := context.WithValue(r.Context(), "user", tk.UserId)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(rw, r) //proceed in the middleware chain!
 	})
