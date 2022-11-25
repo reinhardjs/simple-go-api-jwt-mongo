@@ -22,7 +22,7 @@ type User struct {
 
 var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
 
-func (account *User) Validate() (responses.BaseResponse, bool) {
+func (account *User) Validate(context context.Context) (responses.BaseResponse, bool) {
 
 	if !strings.Contains(account.Email, "@") {
 		return responses.BaseResponse{Status: http.StatusBadRequest, Message: "Email address is required", Data: map[string]interface{}{}}, false
@@ -32,13 +32,13 @@ func (account *User) Validate() (responses.BaseResponse, bool) {
 		return responses.BaseResponse{Status: http.StatusBadRequest, Message: "Password address is required", Data: map[string]interface{}{}}, false
 	}
 
-	filter := bson.D{primitive.E{Key: "email", Value: account.Email}}
+	filter := bson.M{"email": account.Email}
 
 	//Email must be unique
 	var result User
-	err := userCollection.FindOne(context.TODO(), filter).Decode(&result)
+	err := userCollection.FindOne(context, filter).Decode(&result)
 
-	if err != nil {
+	if err != nil && err != mongo.ErrNoDocuments {
 		return responses.BaseResponse{Status: http.StatusBadRequest, Message: "Connection error. Please retry", Data: map[string]interface{}{}}, false
 	}
 	if result.Email != "" {
