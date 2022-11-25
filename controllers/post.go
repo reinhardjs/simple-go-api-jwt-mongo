@@ -156,3 +156,34 @@ func DeletePost() http.HandlerFunc {
 		json.NewEncoder(rw).Encode(response)
 	}
 }
+
+func GetPost() http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		params := mux.Vars(r)
+		userId := params["userId"]
+
+		defer cancel()
+
+		objId, _ := primitive.ObjectIDFromHex(userId)
+
+		rw.Header().Add("Content-Type", "application/json")
+
+		var post models.Post
+
+		//all validation passed, then insert new data to users collection
+		var postsCollection *mongo.Collection = configs.GetCollection(configs.DB, "posts")
+		err := postsCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&post)
+
+		if err != nil {
+			response := responses.BaseResponse{Status: http.StatusInternalServerError, Message: err.Error(), Data: map[string]interface{}{}}
+			rw.WriteHeader(response.Status)
+			json.NewEncoder(rw).Encode(response)
+			return
+		}
+
+		response := responses.BaseResponse{Status: http.StatusOK, Message: "success", Data: post}
+		rw.WriteHeader(response.Status)
+		json.NewEncoder(rw).Encode(response)
+	}
+}
