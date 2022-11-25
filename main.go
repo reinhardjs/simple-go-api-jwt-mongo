@@ -15,6 +15,8 @@ func main() {
 
 	// add JWTAuth middleware
 	router.Use(middlewares.JwtAuthentication)
+
+	// add RolePermissonChecker middleware
 	router.Use(middlewares.RolePermissionCheck)
 
 	// add routes
