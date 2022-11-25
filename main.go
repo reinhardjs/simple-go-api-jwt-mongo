@@ -21,6 +21,7 @@ func main() {
 
 	// add routes
 	routes.UserRoute(router)
+	routes.PostRoute(router)
 
 	fmt.Println("starting at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", router))
