@@ -8,17 +8,15 @@ import (
 	"simple-api/configs"
 	"simple-api/models"
 	"simple-api/responses"
+	"simple-api/utils"
 	"time"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v4"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
-
-var validate = validator.New()
 
 func CreateUser() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
@@ -38,7 +36,7 @@ func CreateUser() http.HandlerFunc {
 		}
 
 		//use the validator library to validate required fields
-		if validationErr := validate.Struct(&user); validationErr != nil {
+		if validationErr := utils.Validate.Struct(&user); validationErr != nil {
 			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: validationErr.Error(), Data: map[string]interface{}{}}
 			rw.WriteHeader(response.Status)
 			json.NewEncoder(rw).Encode(response)
@@ -118,7 +116,7 @@ func GetToken() http.HandlerFunc {
 		token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 		tokenString, _ := token.SignedString([]byte(os.Getenv("token_secret_key")))
 
-		response := responses.BaseResponse{Status: http.StatusNotFound, Message: "token", Data: map[string]interface{}{"email": user.Email, "token": tokenString}}
+		response := responses.BaseResponse{Status: http.StatusOK, Message: "token", Data: map[string]interface{}{"email": user.Email, "token": tokenString}}
 		rw.WriteHeader(response.Status)
 		json.NewEncoder(rw).Encode(response)
 		return
