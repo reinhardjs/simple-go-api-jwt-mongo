@@ -37,7 +37,7 @@ var RolePermissionCheck = func(next http.Handler) http.Handler {
 			isPermitted = true
 		}
 
-		if !isPermitted { //Token is missing, returns with error code 403 Unauthorized
+		if !isPermitted {
 			rw.Header().Add("Content-Type", "application/json")
 			rw.WriteHeader(http.StatusForbidden)
 			response := responses.BaseResponse{Status: http.StatusForbidden, Message: "You are not permitted to access this endpoint", Data: map[string]interface{}{}}
