@@ -36,6 +36,12 @@ paths:
       summary: Create user
       description: This can only be done by account with admin role.
       operationId: getToken
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
       responses:
         default:
           description: successful operation
