@@ -12,6 +12,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// Client instance
+var DB *mongo.Client = ConnectDB()
+
 func ConnectDB() *mongo.Client {
 	err := godotenv.Load()
 	if err != nil {
@@ -37,9 +40,6 @@ func ConnectDB() *mongo.Client {
 	fmt.Println("Connected to MongoDB")
 	return client
 }
-
-// Client instance
-var DB *mongo.Client = ConnectDB()
 
 // getting database collections
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
