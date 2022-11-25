@@ -12,8 +12,6 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var UserRole string
-
 var JwtAuthentication = func(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
@@ -60,7 +58,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return []byte(os.Getenv("token_secret_key")), nil
 		})
 
-		UserRole = tk.Role
+		userRole := tk.Role
 
 		if err != nil { //Malformed token, returns with http code 403 as usual
 			rw.Header().Add("Content-Type", "application/json")
@@ -79,7 +77,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		}
 
 		//Everything went well, proceed with the request and set the caller to the user retrieved from the parsed token
-		ctx := context.WithValue(r.Context(), "user", tk.UserId)
+		ctx := context.WithValue(r.Context(), "user-role", userRole)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(rw, r) //proceed in the middleware chain!
 	})
