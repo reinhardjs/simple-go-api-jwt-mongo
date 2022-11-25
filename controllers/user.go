@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var validate = validator.New()
@@ -46,6 +47,9 @@ func CreateUser() http.HandlerFunc {
 			Token:    user.Token,
 			Role:     user.Role,
 		}
+
+		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
+		newUser.Password = string(hashedPassword)
 
 		//validate if there is existing user
 		if response, ok := newUser.Validate(ctx); !ok {
