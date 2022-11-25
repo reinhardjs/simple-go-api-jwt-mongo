@@ -21,24 +21,24 @@ var validate = validator.New()
 func CreateUser() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
 
 		var user models.User
-		defer cancel()
+
+		rw.Header().Add("Content-Type", "application/json")
 
 		//validate the request body
 		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-			rw.Header().Add("Content-Type", "application/json")
-			rw.WriteHeader(http.StatusBadRequest)
 			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"error": err.Error()}}
+			rw.WriteHeader(response.Status)
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
 
 		//use the validator library to validate required fields
 		if validationErr := validate.Struct(&user); validationErr != nil {
-			rw.Header().Add("Content-Type", "application/json")
-			rw.WriteHeader(http.StatusBadRequest)
 			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: validationErr.Error(), Data: map[string]interface{}{}}
+			rw.WriteHeader(response.Status)
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
@@ -56,7 +56,6 @@ func CreateUser() http.HandlerFunc {
 
 		//validate if there is existing user
 		if response, ok := newUser.Validate(ctx); !ok {
-			rw.Header().Add("Content-Type", "application/json")
 			rw.WriteHeader(response.Status)
 			json.NewEncoder(rw).Encode(response)
 			return
@@ -66,16 +65,14 @@ func CreateUser() http.HandlerFunc {
 		result, err := newUser.Create(ctx, newUser)
 
 		if err != nil {
-			rw.Header().Add("Content-Type", "application/json")
-			rw.WriteHeader(http.StatusInternalServerError)
 			response := responses.BaseResponse{Status: http.StatusInternalServerError, Message: err.Error(), Data: map[string]interface{}{}}
+			rw.WriteHeader(response.Status)
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
 
-		rw.Header().Add("Content-Type", "application/json")
-		rw.WriteHeader(http.StatusCreated)
 		response := responses.BaseResponse{Status: http.StatusCreated, Message: "success", Data: result}
+		rw.WriteHeader(response.Status)
 		json.NewEncoder(rw).Encode(response)
 	}
 }
@@ -83,24 +80,24 @@ func CreateUser() http.HandlerFunc {
 func GetToken() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-
 		defer cancel()
+
 		user := &models.User{}
+
+		rw.Header().Add("Content-Type", "application/json")
 
 		err := json.NewDecoder(r.Body).Decode(user) //decode the request body into struct and failed if any error occur
 		if err != nil {
-			rw.Header().Add("Content-Type", "application/json")
-			rw.WriteHeader(http.StatusBadRequest)
 			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: map[string]interface{}{}}
+			rw.WriteHeader(response.Status)
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
 
 		result, err := user.Find(ctx)
 		if err != nil && err == mongo.ErrNoDocuments {
-			rw.Header().Add("Content-Type", "application/json")
-			rw.WriteHeader(http.StatusNotFound)
 			response := responses.BaseResponse{Status: http.StatusNotFound, Message: "User not found", Data: map[string]interface{}{}}
+			rw.WriteHeader(response.Status)
 			json.NewEncoder(rw).Encode(response)
 			return
 		}
@@ -113,9 +110,9 @@ func GetToken() http.HandlerFunc {
 		token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 		tokenString, _ := token.SignedString([]byte(os.Getenv("token_secret_key")))
 
-		rw.Header().Add("Content-Type", "application/json")
-		rw.WriteHeader(http.StatusNotFound)
 		response := responses.BaseResponse{Status: http.StatusNotFound, Message: "User not found", Data: map[string]interface{}{"email": user.Email, "token": tokenString}}
+		rw.WriteHeader(response.Status)
 		json.NewEncoder(rw).Encode(response)
+		return
 	}
 }
