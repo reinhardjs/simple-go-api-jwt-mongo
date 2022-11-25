@@ -8,6 +8,25 @@ I've deployed this project to my personal VPS, and deployed to `single-node kube
 
 You can access via http://103.134.154.18:32012
 
+Credentials:
+```
+# For non expiring token you can use the following jwt token
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2MzgwYzIxNmE2NjBhOWQ3ZjRmMDZmZDIiLCJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiJ9.kkcnAqajjcx0YmtRnWk-P594v_2wIEObwUzTtuMq_JY
+
+# Here is the example body request of user credentials to access `GET /token` endpoint to get the jwt-token
+1.
+{
+    "email": "admin@email.com",
+    "password": "password"
+}
+
+2.
+{
+    "user": "admin@email.com",
+    "password": "password"
+}
+```
+
 
 #### Built With
 
@@ -46,6 +65,6 @@ kubectl rollout restart deployment/simple-api
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-You can see the example usages from `swagger.yml ` and open it on https://editor.swagger.io
+You can see the example usages from `swagger.yml` and open it on https://editor.swagger.io
 
 Our you can import the postman request collection, `simple-api.postman_collection.json`
