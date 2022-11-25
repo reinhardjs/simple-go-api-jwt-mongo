@@ -12,7 +12,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var userRole string
+var UserRole string
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
 
@@ -60,7 +60,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return []byte(os.Getenv("token_secret_key")), nil
 		})
 
-		userRole = tk.Role
+		UserRole = tk.Role
 
 		if err != nil { //Malformed token, returns with http code 403 as usual
 			rw.Header().Add("Content-Type", "application/json")
