@@ -8,16 +8,14 @@ import (
 	"strings"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type User struct {
-	Id       primitive.ObjectID `json:"id,omitempty"`
-	Email    string             `json:"email,omitempty"`
-	Password string             `json:"password,omitempty"`
-	Token    string             `json:"token,omitempty"`
-	Role     string             `json:"role,omitempty"`
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
+	Token    string `json:"token,omitempty"`
+	Role     string `json:"role,omitempty"`
 }
 
 func (account *User) Validate(context context.Context) (responses.BaseResponse, bool) {
