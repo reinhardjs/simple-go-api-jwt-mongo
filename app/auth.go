@@ -34,7 +34,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		if tokenHeader == "" { //Token is missing, returns with error code 403 Unauthorized
 			rw.WriteHeader(http.StatusForbidden)
-			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: "Missing auth token", Data: map[string]interface{}{}}
+			response := responses.BaseResponse{Status: http.StatusForbidden, Message: "Missing auth token", Data: map[string]interface{}{}}
 			rw.Header().Add("Content-Type", "application/json")
 			json.NewEncoder(rw).Encode(response)
 			return
@@ -43,7 +43,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		splitted := strings.Split(tokenHeader, " ") //The token normally comes in format `Bearer {token-body}`, we check if the retrieved token matched this requirement
 		if len(splitted) != 2 {
 			rw.WriteHeader(http.StatusForbidden)
-			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: "Invalid/Malformed auth token", Data: map[string]interface{}{}}
+			response := responses.BaseResponse{Status: http.StatusForbidden, Message: "Invalid/Malformed auth token", Data: map[string]interface{}{}}
 			rw.Header().Add("Content-Type", "application/json")
 			json.NewEncoder(rw).Encode(response)
 			return
@@ -60,7 +60,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		if err != nil { //Malformed token, returns with http code 403 as usual
 			rw.WriteHeader(http.StatusForbidden)
-			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: "Malformed authentication token", Data: map[string]interface{}{}}
+			response := responses.BaseResponse{Status: http.StatusForbidden, Message: "Malformed authentication token", Data: map[string]interface{}{}}
 			rw.Header().Add("Content-Type", "application/json")
 			json.NewEncoder(rw).Encode(response)
 			return
@@ -68,7 +68,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		if !token.Valid { //Token is invalid, maybe not signed on this server
 			rw.WriteHeader(http.StatusForbidden)
-			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: "Token is not valid", Data: map[string]interface{}{}}
+			response := responses.BaseResponse{Status: http.StatusForbidden, Message: "Token is not valid", Data: map[string]interface{}{}}
 			rw.Header().Add("Content-Type", "application/json")
 			json.NewEncoder(rw).Encode(response)
 			return
