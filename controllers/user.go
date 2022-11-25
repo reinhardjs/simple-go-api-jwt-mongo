@@ -13,7 +13,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -44,7 +43,6 @@ func CreateUser() http.HandlerFunc {
 		}
 
 		newUser := models.User{
-			Id:       primitive.NewObjectID(),
 			Email:    user.Email,
 			Password: user.Password,
 			Token:    user.Token,
@@ -110,7 +108,7 @@ func GetToken() http.HandlerFunc {
 
 		// create JWT token
 		threeMinute := (time.Hour / 60) * 3
-		tk := &models.Token{UserId: result.Id, Email: result.Email, Role: result.Role, RegisteredClaims: jwt.RegisteredClaims{
+		tk := &models.Token{Email: result.Email, Role: result.Role, RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(threeMinute)),
 		}}
 		token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
