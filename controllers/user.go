@@ -4,22 +4,20 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"simple-api/configs"
 	"simple-api/models"
 	"simple-api/responses"
 	"time"
 
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
 var validate = validator.New()
 
 func CreateUser() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+
 		var user models.User
 		defer cancel()
 
@@ -49,7 +47,17 @@ func CreateUser() http.HandlerFunc {
 			Role:     user.Role,
 		}
 
-		result, err := userCollection.InsertOne(ctx, newUser)
+		//validate if there is existing user
+		if response, ok := newUser.Validate(); !ok {
+			rw.WriteHeader(response.Status)
+			rw.Header().Add("Content-Type", "application/json")
+			json.NewEncoder(rw).Encode(response)
+			return
+		}
+
+		//all validation passed, then insert new data to users collection
+		result, err := newUser.Create(ctx, newUser)
+
 		if err != nil {
 			rw.WriteHeader(http.StatusInternalServerError)
 			response := responses.BaseResponse{Status: http.StatusInternalServerError, Message: err.Error(), Data: map[string]interface{}{}}
