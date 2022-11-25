@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "28309dc2-e5ee-4c1c-94d3-bb23f43dfd59",
+		"name": "simple-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4189303"
+	},
+	"item": [
+		{
+			"name": "add new user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiIsImV4cCI6MTY2OTQwMTc3Nn0.5JwZrqbnAXmdLne-Z0m7Bi4dI4aSZdfJ5xZjUjk57Js",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"user@email.com\",\r\n    \"password\": \"password123\",\r\n    \"role\": \"user\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://103.134.154.18:32012/users",
+					"protocol": "http",
+					"host": [
+						"103",
+						"134",
+						"154",
+						"18"
+					],
+					"port": "32012",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get token",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"admin@email.com\",\r\n    \"password\": \"password\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://103.134.154.18:32012/token",
+					"protocol": "http",
+					"host": [
+						"103",
+						"134",
+						"154",
+						"18"
+					],
+					"port": "32012",
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add new post",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiIsImV4cCI6MTY2OTQwMTc3Nn0.5JwZrqbnAXmdLne-Z0m7Bi4dI4aSZdfJ5xZjUjk57Js",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"This is title updated\",\r\n    \"description\": \"This is descriptions\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://103.134.154.18:32012/posts",
+					"protocol": "http",
+					"host": [
+						"103",
+						"134",
+						"154",
+						"18"
+					],
+					"port": "32012",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get list post",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2MzgwYzIxNmE2NjBhOWQ3ZjRmMDZmZDIiLCJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiJ9.kkcnAqajjcx0YmtRnWk-P594v_2wIEObwUzTtuMq_JY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://103.134.154.18:32012/posts",
+					"protocol": "http",
+					"host": [
+						"103",
+						"134",
+						"154",
+						"18"
+					],
+					"port": "32012",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get post",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiIsImV4cCI6MTY2OTQwMTc3Nn0.5JwZrqbnAXmdLne-Z0m7Bi4dI4aSZdfJ5xZjUjk57Js",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://103.134.154.18:32012/posts/63810c3cf0ba0846f9b3ffd5",
+					"protocol": "http",
+					"host": [
+						"103",
+						"134",
+						"154",
+						"18"
+					],
+					"port": "32012",
+					"path": [
+						"posts",
+						"63810c3cf0ba0846f9b3ffd5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update post",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiIsImV4cCI6MTY2OTQwMTc3Nn0.5JwZrqbnAXmdLne-Z0m7Bi4dI4aSZdfJ5xZjUjk57Js",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"This is title updateds\",\r\n    \"description\": \"This is descriptions\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://103.134.154.18:32012/posts/63810c3cf0ba0846f9b3ffd5",
+					"protocol": "http",
+					"host": [
+						"103",
+						"134",
+						"154",
+						"18"
+					],
+					"port": "32012",
+					"path": [
+						"posts",
+						"63810c3cf0ba0846f9b3ffd5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update post Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiIsImV4cCI6MTY2OTQwMTc3Nn0.5JwZrqbnAXmdLne-Z0m7Bi4dI4aSZdfJ5xZjUjk57Js",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://103.134.154.18:32012/posts/63810c3cf0ba0846f9b3ffd5",
+					"protocol": "http",
+					"host": [
+						"103",
+						"134",
+						"154",
+						"18"
+					],
+					"port": "32012",
+					"path": [
+						"posts",
+						"63810c3cf0ba0846f9b3ffd5"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
