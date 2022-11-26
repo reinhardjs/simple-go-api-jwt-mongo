@@ -23,7 +23,7 @@ Credentials:
 
 2.
 {
-    "user": "admin@email.com",
+    "user": "user@email.com",
     "password": "password"
 }
 ```
