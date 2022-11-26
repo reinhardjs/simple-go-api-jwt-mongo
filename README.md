@@ -10,7 +10,7 @@ You can access via http://103.134.154.18:32012
 
 ## Credentials
 ```
-# Here is the example body request of user credentials to access `GET /token` endpoint to get the jwt-token
+# Here are the user credentials to access `GET /token` endpoint to get the jwt-token
 1. ADMIN
 {
     "email": "admin@email.com",
