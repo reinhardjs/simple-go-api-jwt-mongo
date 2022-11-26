@@ -15,15 +15,15 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2MzgwYzIxNmE2NjBhOWQ3ZjRmMDZ
 Credentials:
 ```
 # Here is the example body request of user credentials to access `GET /token` endpoint to get the jwt-token
-1.
+1. ADMIN
 {
     "email": "admin@email.com",
     "password": "password"
 }
 
-2.
+2. USER
 {
-    "user": "user@email.com",
+    "email": "user@email.com",
     "password": "password"
 }
 ```
