@@ -43,7 +43,7 @@ Credentials:
 
 ### Prerequisites
 
-This project is configured to be able to containerized using docker (Dockerfile). And deployed in single-node kubernetes cluster. (Deployment.yaml)
+This project is configured to be able to containerized using docker (Dockerfile). And deployed on a single-node kubernetes cluster. (Deployment.yaml)
 
 Here is what i mean by single-node cluster, go checkout my story on medium here:
 
