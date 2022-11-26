@@ -106,6 +106,15 @@ func GetToken() http.HandlerFunc {
 			return
 		}
 
+		err = bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(user.Password))
+		if err != nil && err == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
+			response := responses.BaseResponse{Status: http.StatusBadRequest, Message: "Invalid login credentials. Please try again", Data: map[string]interface{}{}}
+			rw.WriteHeader(response.Status)
+			json.NewEncoder(rw).Encode(response)
+			return
+		}
+		user.Password = ""
+
 		// create JWT token
 		threeMinute := (time.Hour / 60) * 3
 		tk := &models.Token{Email: result.Email, Role: result.Role, RegisteredClaims: jwt.RegisteredClaims{
