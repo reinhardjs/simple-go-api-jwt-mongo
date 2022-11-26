@@ -8,11 +8,7 @@ I've deployed this project to my personal VPS, and deployed to `single-node kube
 
 You can access via http://103.134.154.18:32012
 
-For non expiring token you can use the following jwt token
-
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2MzgwYzIxNmE2NjBhOWQ3ZjRmMDZmZDIiLCJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiJ9.kkcnAqajjcx0YmtRnWk-P594v_2wIEObwUzTtuMq_JY
-
-Credentials:
+## Credentials
 ```
 # Here is the example body request of user credentials to access `GET /token` endpoint to get the jwt-token
 1. ADMIN
@@ -27,6 +23,13 @@ Credentials:
     "password": "password"
 }
 ```
+
+<br>
+
+Your token will be expiring for 3 minutes. You should request for new token from `/login` endpoint <br>
+You can use non expiring token below, if u disturbed by the expired token
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2MzgwYzIxNmE2NjBhOWQ3ZjRmMDZmZDIiLCJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiJ9.kkcnAqajjcx0YmtRnWk-P594v_2wIEObwUzTtuMq_JY
 
 
 #### Built With
