@@ -60,6 +60,10 @@ docker build -t simple-api .
 ```
 
 ```sh
+kubectl apply -f Deployment.yaml
+```
+
+```sh
 kubectl rollout restart deployment/simple-api
 ```
 
