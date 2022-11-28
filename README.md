@@ -26,7 +26,7 @@ You can access via http://103.134.154.18:32012
 
 <br>
 
-Your token will be expiring for 3 minutes. You should request for new token from `/token` endpoint <br>
+Your token will be expiring for 3 minutes. You should request for new token from `GET /token` endpoint <br>
 You can use non expiring token below, if u disturbed by the expired token
 
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2MzgwYzIxNmE2NjBhOWQ3ZjRmMDZmZDIiLCJFbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsIlJvbGUiOiJhZG1pbiJ9.kkcnAqajjcx0YmtRnWk-P594v_2wIEObwUzTtuMq_JY
